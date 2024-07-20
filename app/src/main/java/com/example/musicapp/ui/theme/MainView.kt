@@ -8,15 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.MaterialTheme
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.ScaffoldState
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,11 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.musicapp.AccountDialog
 import com.example.musicapp.MainViewModel
 import com.example.musicapp.Screen
 import com.example.musicapp.screensInDrawer
@@ -49,65 +45,64 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainView() {
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val scope: CoroutineScope = rememberCoroutineScope()
+    val viewModel: MainViewModel = viewModel()
 
-    val scaffoldState : ScaffoldState = rememberScaffoldState()
-    val scope : CoroutineScope = rememberCoroutineScope()
-    val viewModel : MainViewModel = viewModel()
-
-    // to find out on which "View" we currently are
-    val controller : NavController = rememberNavController()
+    val controller: NavController = rememberNavController()
     val navBackStackEntry by controller.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    val dialogOpen = remember { mutableStateOf(false) }
     val currentScreen = remember { viewModel.currentScreen.value }
-
     val title = remember { mutableStateOf(currentScreen.title) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Home")},
-                navigationIcon = { IconButton(onClick = {
-                    scope.launch {
-                        scaffoldState.drawerState.open()
+                title = { Text("Home") },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        scope.launch {
+                            scaffoldState.drawerState.open()
+                        }
+                    }) {
+                        Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Menu")
                     }
-                    // we need to add a functionality in order to be able to open the drawer
-                }) {
-
-                    Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Menu")
-                }}
+                }
             )
-        },scaffoldState = scaffoldState,
+        },
+        scaffoldState = scaffoldState,
         drawerContent = {
             LazyColumn(Modifier.padding(16.dp)) {
-                items(screensInDrawer) {
-                    item ->
+                items(screensInDrawer) { item ->
                     DrawerItem(selected = currentRoute == item.dRoute, item = item) {
                         scope.launch {
                             scaffoldState.drawerState.close()
                         }
-                        if (item.dTitle == "add_account") {
-                            // i will mange it later to add a dialog
-                        }else{
+                        if (item.dTitle == "Add Account") {
+                            dialogOpen.value = true
+                        } else {
                             controller.navigate(item.dRoute)
                             title.value = item.dTitle
                         }
-
                     }
                 }
             }
         }
     ) {
         Navigation(navController = controller, viewModel = viewModel, pd = it)
+        AccountDialog(dialogOpen = dialogOpen)
     }
 }
+
 @Composable
 fun DrawerItem(
-    selected : Boolean,
+    selected: Boolean,
     item: Screen.DrawerScreen,
-    onDrawerItemClicked : () -> Unit) {
-
-    val background= if (selected) Color.LightGray else Color.White
+    onDrawerItemClicked: () -> Unit
+) {
+    val background = if (selected) Color.LightGray else Color.White
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -122,40 +117,31 @@ fun DrawerItem(
             contentDescription = item.dTitle,
             Modifier.padding(end = 8.dp, top = 4.dp)
         )
-        Text(text = item.dTitle,
+        Text(
+            text = item.dTitle,
             style = MaterialTheme.typography.h5
         )
     }
 }
-@Composable
-fun Navigation(navController: NavController, viewModel: MainViewModel, pd : PaddingValues) {
 
+@Composable
+fun Navigation(navController: NavController, viewModel: MainViewModel, pd: PaddingValues) {
     NavHost(
         navController = navController as NavHostController,
-        startDestination = Screen.DrawerScreen.AddAccount.route,
-        modifier = Modifier.padding(pd)) {
-
-        composable(Screen.DrawerScreen.AddAccount.route) {
+        startDestination = Screen.DrawerScreen.Account.route,
+        modifier = Modifier.padding(pd)
+    ) {
+        composable(Screen.DrawerScreen.Account.route) {
+            // Your Account screen content
         }
-
         composable(Screen.DrawerScreen.Subscription.route) {
-
+            // Your Subscription screen content
+        }
+        composable(Screen.DrawerScreen.AddAccount.route) {
+            // Your AddAccount screen content
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

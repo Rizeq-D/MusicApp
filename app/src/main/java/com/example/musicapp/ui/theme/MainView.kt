@@ -40,6 +40,7 @@ import com.example.musicapp.MainViewModel
 import com.example.musicapp.Screen
 import com.example.musicapp.screensInDrawer
 import com.example.musicapp.ui.theme.AccountView
+import com.example.musicapp.ui.theme.Subscription
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -136,7 +137,7 @@ fun Navigation(navController: NavController, viewModel: MainViewModel, pd: Paddi
             AccountView()
         }
         composable(Screen.DrawerScreen.Subscription.route) {
-            // Your Subscription screen content
+            Subscription()
         }
         composable(Screen.DrawerScreen.AddAccount.route) {
             // Your AddAccount screen content

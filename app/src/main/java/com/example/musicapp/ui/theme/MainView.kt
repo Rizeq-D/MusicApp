@@ -35,10 +35,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.musicapp.AccountDialog
+import com.example.musicapp.ui.theme.AccountDialog
 import com.example.musicapp.MainViewModel
 import com.example.musicapp.Screen
 import com.example.musicapp.screensInDrawer
+import com.example.musicapp.ui.theme.AccountView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -60,7 +61,7 @@ fun MainView() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Home") },
+                title = { Text(title.value) },
                 navigationIcon = {
                     IconButton(onClick = {
                         scope.launch {
@@ -132,7 +133,7 @@ fun Navigation(navController: NavController, viewModel: MainViewModel, pd: Paddi
         modifier = Modifier.padding(pd)
     ) {
         composable(Screen.DrawerScreen.Account.route) {
-            // Your Account screen content
+            AccountView()
         }
         composable(Screen.DrawerScreen.Subscription.route) {
             // Your Subscription screen content

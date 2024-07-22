@@ -46,6 +46,7 @@ import com.example.musicapp.screensInDrawer
 import com.example.musicapp.ui.theme.AccountView
 import com.example.musicapp.ui.theme.BrowseScreen
 import com.example.musicapp.ui.theme.Home
+import com.example.musicapp.ui.theme.Library
 import com.example.musicapp.ui.theme.Subscription
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -167,7 +168,7 @@ fun Navigation(navController: NavController, viewModel: MainViewModel, pd: Paddi
             Home()
         }
         composable(Screen.BottomScreen.Library.bRoute) {
-
+            Library()
         }
         composable(Screen.BottomScreen.Browse.bRoute) {
             BrowseScreen()
@@ -179,9 +180,7 @@ fun Navigation(navController: NavController, viewModel: MainViewModel, pd: Paddi
         composable(Screen.DrawerScreen.Subscription.route) {
             Subscription()
         }
-        composable(Screen.DrawerScreen.AddAccount.route) {
-            // Your AddAccount screen content
-        }
+        
     }
 }
 

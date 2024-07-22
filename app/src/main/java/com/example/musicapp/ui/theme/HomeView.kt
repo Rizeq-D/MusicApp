@@ -44,7 +44,7 @@ fun Home() {
     }
 }
 @Composable
-fun BrowserItem(cat : String, drawable : Int) {
+fun BrowserItem(cat: String, drawable: Int) {
 
     Card(modifier = Modifier
         .padding(16.dp)
